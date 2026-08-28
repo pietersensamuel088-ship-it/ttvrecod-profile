@@ -11,8 +11,6 @@ const CONFIG = {
   },
   discordProfile: 'https://discord.com/users/1162838607220965377',
   defaultVolume: 0.70,
-  // Custom cursor: set enabled to true and paste a direct image URL. PNG/WebP works best.
-  // A local cursor also works: 'assets/cursor.png'
   customCursor: {
     enabled: true,
     url: 'assets/cursor.png',
@@ -65,7 +63,6 @@ const volumeValue = document.getElementById('volumeValue');
 const canvas = document.getElementById('particles');
 const ctx = canvas.getContext('2d');
 
-// Centralized editable links: change only CONFIG above.
 const socialLinks = {
   socialDiscord: document.getElementById('socialDiscord'),
   socialInstagram: document.getElementById('socialInstagram'),
@@ -106,7 +103,6 @@ if (volumeSlider) {
   updateVolume();
 }
 
-// Timings are intentionally tied to the uploaded video's own timeline.
 const INTRO_LENGTH = 9.5;
 const FLASHES = [
   { at: 2.10, text: 'TTV/RECOD' },
@@ -201,7 +197,6 @@ function triggerNameFlicker() {
 }
 
 function scheduleNameFlickerBursts() {
-  // Three quick flashes, then another pass about a second later.
   [250, 540, 830, 1950].forEach((delay) => {
     window.setTimeout(() => triggerNameFlicker(), delay);
   });
@@ -211,6 +206,7 @@ function finishIntro() {
   if (finished) return;
   finished = true;
   intro.classList.add('finished');
+  skipIntroButton.hidden = true;
   window.setTimeout(() => {
     profile.classList.add('visible');
     profile.setAttribute('aria-hidden', 'false');
@@ -231,7 +227,7 @@ function finishIntro() {
   }, 120);
 }
 
-// Skip Intro button: created here so the existing HTML structure stays untouched.
+// Skip Intro is created in JS so it works without changing the existing HTML layout.
 const skipIntroButton = document.createElement('button');
 skipIntroButton.type = 'button';
 skipIntroButton.id = 'skipIntroButton';
@@ -239,41 +235,46 @@ skipIntroButton.className = 'skip-intro-button';
 skipIntroButton.textContent = 'SKIP INTRO';
 skipIntroButton.setAttribute('aria-label', 'Skip intro');
 skipIntroButton.hidden = true;
+skipIntroButton.style.pointerEvents = 'auto';
 intro.appendChild(skipIntroButton);
 
 const skipIntroStyle = document.createElement('style');
 skipIntroStyle.textContent = `
-  .skip-intro-button {
+  #skipIntroButton.skip-intro-button {
     position: absolute;
     right: 24px;
     bottom: 28px;
-    z-index: 30;
-    padding: 11px 17px;
-    border: 1px solid rgba(255,255,255,.24);
+    z-index: 100;
+    display: block;
+    padding: 11px 18px;
+    border: 1px solid rgba(255,255,255,.28);
     border-radius: 999px;
-    background: rgba(8,8,8,.62);
+    background: rgba(8,8,8,.72);
     color: #fff;
     font: 700 12px/1 'Space Grotesk', Arial, sans-serif;
     letter-spacing: 1.8px;
     cursor: pointer;
+    pointer-events: auto;
+    opacity: 1;
+    visibility: visible;
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    box-shadow: 0 8px 30px rgba(0,0,0,.35), 0 0 22px rgba(255,30,30,.08);
-    transition: transform .2s ease, background .2s ease, border-color .2s ease, opacity .2s ease;
+    box-shadow: 0 8px 30px rgba(0,0,0,.45), 0 0 22px rgba(255,30,30,.12);
+    transition: transform .2s ease, background .2s ease, border-color .2s ease;
   }
-  .skip-intro-button:hover {
+  #skipIntroButton.skip-intro-button:hover {
     transform: translateY(-2px);
-    background: rgba(120,0,0,.55);
-    border-color: rgba(255,70,70,.6);
+    background: rgba(120,0,0,.65);
+    border-color: rgba(255,70,70,.65);
   }
-  .skip-intro-button:active { transform: scale(.96); }
-  .skip-intro-button:focus-visible {
+  #skipIntroButton.skip-intro-button:active { transform: scale(.96); }
+  #skipIntroButton.skip-intro-button:focus-visible {
     outline: 2px solid rgba(255,70,70,.9);
     outline-offset: 3px;
   }
-  .skip-intro-button[hidden] { display: none; }
+  #skipIntroButton.skip-intro-button[hidden] { display: none !important; }
   @media (max-width: 600px) {
-    .skip-intro-button {
+    #skipIntroButton.skip-intro-button {
       right: 16px;
       bottom: 18px;
       padding: 10px 14px;
@@ -285,7 +286,9 @@ document.head.appendChild(skipIntroStyle);
 
 function skipIntro() {
   if (!started || finished) return;
-  video.currentTime = INTRO_LENGTH;
+  try {
+    video.currentTime = INTRO_LENGTH;
+  } catch (_) {}
   introProgressBar.style.width = '100%';
   skipIntroButton.hidden = true;
   finishIntro();
@@ -330,8 +333,6 @@ async function startExperience() {
   try {
     await video.play();
   } catch (error) {
-    // A user click normally grants audio playback. If a browser still blocks it,
-    // fall back to muted video rather than breaking the intro.
     video.muted = true;
     try { await video.play(); } catch (_) {}
   }
@@ -357,11 +358,10 @@ window.addEventListener('keydown', (event) => {
     event.preventDefault();
     startExperience();
   }
-  if (event.key === 'Escape' && started && !finished) {
+  if ((event.key === 'Escape' || event.key.toLowerCase() === 's') && started && !finished) {
     skipIntro();
   }
 });
 
-// Make sure the profile never appears before the cinematic intro is actually played.
 profile.classList.remove('visible');
 profile.setAttribute('aria-hidden', 'true');
