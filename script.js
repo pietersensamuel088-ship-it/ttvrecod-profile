@@ -231,6 +231,68 @@ function finishIntro() {
   }, 120);
 }
 
+// Skip Intro button: created here so the existing HTML structure stays untouched.
+const skipIntroButton = document.createElement('button');
+skipIntroButton.type = 'button';
+skipIntroButton.id = 'skipIntroButton';
+skipIntroButton.className = 'skip-intro-button';
+skipIntroButton.textContent = 'SKIP INTRO';
+skipIntroButton.setAttribute('aria-label', 'Skip intro');
+skipIntroButton.hidden = true;
+intro.appendChild(skipIntroButton);
+
+const skipIntroStyle = document.createElement('style');
+skipIntroStyle.textContent = `
+  .skip-intro-button {
+    position: absolute;
+    right: 24px;
+    bottom: 28px;
+    z-index: 30;
+    padding: 11px 17px;
+    border: 1px solid rgba(255,255,255,.24);
+    border-radius: 999px;
+    background: rgba(8,8,8,.62);
+    color: #fff;
+    font: 700 12px/1 'Space Grotesk', Arial, sans-serif;
+    letter-spacing: 1.8px;
+    cursor: pointer;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 8px 30px rgba(0,0,0,.35), 0 0 22px rgba(255,30,30,.08);
+    transition: transform .2s ease, background .2s ease, border-color .2s ease, opacity .2s ease;
+  }
+  .skip-intro-button:hover {
+    transform: translateY(-2px);
+    background: rgba(120,0,0,.55);
+    border-color: rgba(255,70,70,.6);
+  }
+  .skip-intro-button:active { transform: scale(.96); }
+  .skip-intro-button:focus-visible {
+    outline: 2px solid rgba(255,70,70,.9);
+    outline-offset: 3px;
+  }
+  .skip-intro-button[hidden] { display: none; }
+  @media (max-width: 600px) {
+    .skip-intro-button {
+      right: 16px;
+      bottom: 18px;
+      padding: 10px 14px;
+      font-size: 11px;
+    }
+  }
+`;
+document.head.appendChild(skipIntroStyle);
+
+function skipIntro() {
+  if (!started || finished) return;
+  video.currentTime = INTRO_LENGTH;
+  introProgressBar.style.width = '100%';
+  skipIntroButton.hidden = true;
+  finishIntro();
+}
+
+skipIntroButton.addEventListener('click', skipIntro);
+
 function animateIntro() {
   if (finished) return;
   const t = video.currentTime || 0;
@@ -247,6 +309,7 @@ function animateIntro() {
   }
 
   if (t >= INTRO_LENGTH) {
+    skipIntroButton.hidden = true;
     finishIntro();
     return;
   }
@@ -258,6 +321,7 @@ async function startExperience() {
   started = true;
   enterButton.classList.add('hidden');
   loading.classList.add('hidden');
+  skipIntroButton.hidden = false;
 
   video.currentTime = 0;
   video.muted = (Number(volumeSlider?.value ?? 70) === 0);
@@ -292,6 +356,9 @@ window.addEventListener('keydown', (event) => {
   if (event.key === 'Enter' || event.key === ' ') {
     event.preventDefault();
     startExperience();
+  }
+  if (event.key === 'Escape' && started && !finished) {
+    skipIntro();
   }
 });
 
