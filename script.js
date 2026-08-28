@@ -10,6 +10,7 @@ const CONFIG = {
     steam: 'https://steamcommunity.com/id/TTVRecod'
   },
   discordProfile: 'https://discord.com/users/1162838607220965377',
+  clipsAdmin: 'https://clips.sa1nt.xyz/admin',
   defaultVolume: 0.70,
   customCursor: {
     enabled: true,
@@ -202,6 +203,23 @@ function scheduleNameFlickerBursts() {
   });
 }
 
+// Add a real website button for the clip admin suite once the profile is revealed.
+function setupClipsAdminButton() {
+  const profileWrap = document.querySelector('.profile-wrap');
+  if (!profileWrap || document.getElementById('clipsAdminButton')) return;
+
+  const button = document.createElement('a');
+  button.id = 'clipsAdminButton';
+  button.className = 'clips-admin-button';
+  button.href = CONFIG.clipsAdmin;
+  button.target = '_blank';
+  button.rel = 'noopener noreferrer';
+  button.innerHTML = '<span>CLIPS ADMIN</span><span class="clips-admin-arrow">↗</span>';
+  profileWrap.appendChild(button);
+}
+
+setupClipsAdminButton();
+
 function finishIntro() {
   if (finished) return;
   finished = true;
@@ -221,13 +239,14 @@ function finishIntro() {
       window.setTimeout(() => {
         socials?.classList.add('socials-visible');
         if (discordCard) discordCard.classList.add('discord-visible');
+        document.getElementById('clipsAdminButton')?.classList.add('visible');
         scheduleRandomNameGlitch();
       }, 3000);
     }
   }, 120);
 }
 
-// Skip Intro is created in JS so it works without changing the existing HTML layout.
+// Proper in-page Skip Intro button. It is not a browser control or notification.
 const skipIntroButton = document.createElement('button');
 skipIntroButton.type = 'button';
 skipIntroButton.id = 'skipIntroButton';
@@ -241,10 +260,12 @@ intro.appendChild(skipIntroButton);
 const skipIntroStyle = document.createElement('style');
 skipIntroStyle.textContent = `
   #skipIntroButton.skip-intro-button {
-    position: absolute;
-    right: 24px;
-    bottom: 28px;
-    z-index: 100;
+    position: fixed;
+    top: 24px;
+    left: 24px;
+    right: auto;
+    bottom: auto;
+    z-index: 1000;
     display: block;
     padding: 11px 18px;
     border: 1px solid rgba(255,255,255,.28);
@@ -273,12 +294,49 @@ skipIntroStyle.textContent = `
     outline-offset: 3px;
   }
   #skipIntroButton.skip-intro-button[hidden] { display: none !important; }
+  .clips-admin-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: fit-content;
+    margin: 24px auto 0;
+    padding: 11px 17px;
+    border: 1px solid rgba(255,255,255,.18);
+    border-radius: 999px;
+    background: rgba(10,10,10,.58);
+    color: #fff;
+    text-decoration: none;
+    font: 700 11px/1 'Space Grotesk', Arial, sans-serif;
+    letter-spacing: 1.7px;
+    opacity: 0;
+    transform: translateY(10px);
+    pointer-events: none;
+    transition: opacity .45s ease, transform .45s ease, background .2s ease, border-color .2s ease;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  .clips-admin-button.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .clips-admin-button:hover {
+    background: rgba(120,0,0,.55);
+    border-color: rgba(255,70,70,.55);
+    transform: translateY(-2px);
+  }
+  .clips-admin-arrow { font-size: 14px; line-height: 0; }
   @media (max-width: 600px) {
     #skipIntroButton.skip-intro-button {
-      right: 16px;
-      bottom: 18px;
+      top: 16px;
+      left: 16px;
       padding: 10px 14px;
       font-size: 11px;
+    }
+    .clips-admin-button {
+      width: 100%;
+      max-width: 260px;
     }
   }
 `;
