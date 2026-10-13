@@ -29,7 +29,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css?v=2.5" />
 </head>
 <body>
   <main class="page">
@@ -126,14 +126,16 @@
       </div>
     </section>
 
-    <!-- Sleek Top-Right Volume Control (Non-label container with direct slider hit target) -->
-    <div class="volume-control" id="volumeControlWrap" aria-label="Video volume">
-      <button type="button" id="volumeMuteBtn" class="volume-mute-btn" aria-label="Toggle sound">
+    <!-- Top-Right Sleek Volume Controller -->
+    <div class="volume-control" id="volumeControlWrap" aria-label="Volume controller">
+      <button type="button" id="volumeMuteBtn" class="volume-mute-btn" aria-label="Toggle mute">
         <svg id="volumeIcon" viewBox="0 0 24 24" aria-hidden="true">
           <path d="M4 9v6h4l5 4V5L8 9H4Zm11.5 3a3.5 3.5 0 0 0-1.7-3v6a3.5 3.5 0 0 0 1.7-3Zm0-7v1.7a7 7 0 0 1 0 10.6v1.7a8.7 8.7 0 0 0 0-14Z"/>
         </svg>
       </button>
-      <input id="volumeSlider" type="range" min="0" max="100" value="70" step="1" aria-label="Volume" />
+      <div class="volume-slider-wrap">
+        <input id="volumeSlider" type="range" min="0" max="100" value="70" step="1" aria-label="Volume slider" />
+      </div>
       <span id="volumeValue">70%</span>
     </div>
 
@@ -148,6 +150,6 @@
     <div id="loading" class="loading"><span class="loader-dot"></span> loading video…</div>
     <div id="customPointer" class="custom-pointer" aria-hidden="true"><img src="assets/cursor.png" alt="" draggable="false" /></div>
   </main>
-  <script src="script.js"></script>
+  <script src="script.js?v=2.5"></script>
 </body>
 </html>

@@ -41,7 +41,7 @@ a, button {
   overflow: hidden;
 }
 
-/* Background video & atmospheric overlays */
+/* Background video & overlays */
 .bg-video {
   position: absolute;
   inset: 0;
@@ -120,12 +120,13 @@ a, button {
   inset: 0;
   z-index: 10;
   pointer-events: none;
-  transition: opacity 0.5s ease;
+  transition: opacity 0.4s ease;
 }
 
 .intro.finished {
-  opacity: 0;
-  pointer-events: none;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  display: none !important;
 }
 
 .intro-black {
@@ -225,7 +226,7 @@ a, button {
   padding: 11px 22px;
   border: 1px solid rgba(255, 255, 255, 0.28);
   border-radius: 999px;
-  background: rgba(10, 10, 10, 0.75);
+  background: rgba(12, 12, 12, 0.85);
   color: #fff;
   font-family: 'Space Grotesk', sans-serif;
   font-size: 11px;
@@ -241,8 +242,8 @@ a, button {
 
 .skip-intro-button:hover {
   transform: translateY(-2px);
-  background: rgba(140, 12, 32, 0.8);
-  border-color: rgba(255, 70, 90, 0.8);
+  background: rgba(140, 12, 32, 0.85);
+  border-color: rgba(255, 70, 90, 0.85);
   box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6), 0 0 28px rgba(255, 33, 71, 0.45);
 }
 
@@ -369,12 +370,12 @@ a, button {
   place-items: center;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.2s ease;
+  transition: opacity 0.35s ease;
 }
 
 .profile.visible {
-  opacity: 1;
-  pointer-events: auto;
+  opacity: 1 !important;
+  pointer-events: auto !important;
 }
 
 .profile-wrap {
@@ -489,7 +490,8 @@ a, button {
 
 /* Entrance flicker animation */
 .name-stack h1.flicker-in {
-  visibility: visible;
+  visibility: visible !important;
+  opacity: 1 !important;
   animation: refinedNameFlicker 0.95s cubic-bezier(0.19, 1, 0.22, 1) both;
 }
 
@@ -628,6 +630,7 @@ a, button {
 }
 
 .saint-name.saint-visible {
+  opacity: 1 !important;
   animation: saintIgnite 0.9s cubic-bezier(0.16, 0.8, 0.2, 1) both;
 }
 
@@ -689,6 +692,7 @@ a, button {
 }
 
 .socials.socials-visible {
+  opacity: 1 !important;
   animation: socialsContainerRise 0.9s cubic-bezier(0.16, 0.72, 0.18, 1) both;
   pointer-events: auto;
 }
@@ -721,6 +725,7 @@ a, button {
 }
 
 .socials.socials-visible .social {
+  opacity: 1 !important;
   animation: socialItemSpring 0.7s cubic-bezier(0.34, 1.4, 0.64, 1) both;
 }
 
@@ -819,6 +824,7 @@ a, button {
 }
 
 .discord-card.discord-visible {
+  opacity: 1 !important;
   animation: cardRiseSpring 0.85s cubic-bezier(0.34, 1.4, 0.64, 1) both;
 }
 
@@ -942,7 +948,7 @@ a, button {
   transform: translate(2px, -2px);
 }
 
-/* --- Refined Volume Control (Fixed Top-Right) --- */
+/* --- Refined Volume Control (Fixed Top-Right Glass Pill) --- */
 .volume-control {
   position: fixed;
   top: 24px;
@@ -953,12 +959,12 @@ a, button {
   align-items: center;
   gap: 10px;
   padding: 6px 14px 6px 10px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: 999px;
-  background: linear-gradient(180deg, rgba(22, 22, 22, 0.72), rgba(10, 10, 10, 0.55));
+  background: rgba(14, 14, 14, 0.75);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08);
   color: rgba(255, 255, 255, 0.9);
   opacity: 0;
   pointer-events: none;
@@ -974,13 +980,16 @@ a, button {
 
 .volume-control:hover,
 .volume-control:focus-within {
-  border-color: rgba(255, 79, 134, 0.45);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45), 0 0 25px rgba(255, 79, 134, 0.15);
+  border-color: rgba(255, 79, 134, 0.5);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.55), 0 0 20px rgba(255, 79, 134, 0.18);
 }
 
+/* Force-reset button styles to prevent white box browser default */
 .volume-mute-btn {
-  background: transparent;
-  border: 0;
+  background: transparent !important;
+  border: 0 !important;
+  outline: none !important;
+  box-shadow: none !important;
   padding: 4px;
   margin: 0;
   color: #fff;
@@ -993,7 +1002,7 @@ a, button {
 }
 
 .volume-mute-btn:hover {
-  transform: scale(1.1);
+  transform: scale(1.12);
   color: var(--accent);
 }
 
@@ -1004,10 +1013,17 @@ a, button {
   filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.25));
 }
 
+.volume-slider-wrap {
+  display: flex;
+  align-items: center;
+  width: 110px;
+  height: 28px;
+}
+
 .volume-control input[type=range] {
   --fill: 70%;
-  width: 110px;
-  height: 28px; /* Comfortable hit area */
+  width: 100%;
+  height: 28px;
   margin: 0;
   appearance: none;
   -webkit-appearance: none;
@@ -1147,7 +1163,7 @@ html.custom-cursor-enabled label {
     right: 14px;
     padding: 5px 10px;
   }
-  .volume-control input[type=range] {
+  .volume-slider-wrap {
     width: 75px;
   }
   .skip-intro-button {

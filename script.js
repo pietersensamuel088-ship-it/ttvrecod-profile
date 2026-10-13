@@ -115,7 +115,7 @@ function updateVolume() {
     video.muted = value === 0;
   }
 
-  // Update speaker SVG
+  // Update speaker SVG dynamically
   if (volumeIcon) {
     if (value === 0) {
       volumeIcon.innerHTML = '<path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>';
@@ -146,7 +146,10 @@ if (volumeSlider) {
 }
 
 if (volumeMuteBtn) {
-  volumeMuteBtn.addEventListener('click', toggleMute);
+  volumeMuteBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleMute();
+  });
 }
 
 // --- Cinematic Background Particles ---
@@ -161,7 +164,7 @@ function resizeParticles() {
 window.addEventListener('resize', resizeParticles);
 resizeParticles();
 
-const particles = Array.from({ length: 120 }, () => ({
+const particles = Array.from({ length: 110 }, () => ({
   x: Math.random() * window.innerWidth,
   y: Math.random() * window.innerHeight,
   r: Math.random() * 2 + 0.3,
@@ -195,7 +198,7 @@ function drawParticles() {
 drawParticles();
 
 // --- Intro Sequence & Glitches ---
-const INTRO_LENGTH = 8.5; // Optimized cinematic intro duration
+const INTRO_LENGTH = 6.0; // Snappy 6-second cinematic sequence
 const FLASHES = [
   { at: 1.80, text: 'TTV/RECOD' },
   { at: 2.30, text: 'RECOD' },
@@ -203,13 +206,13 @@ const FLASHES = [
   { at: 3.50, text: 'RECOD' },
   { at: 4.10, text: 'TTV/RECOD' },
   { at: 4.80, text: 'TTV/RECOD' },
-  { at: 5.40, text: 'RECOD' },
-  { at: 6.00, text: 'TTV/RECOD' }
+  { at: 5.40, text: 'RECOD' }
 ];
 
 let started = false;
 let finished = false;
 let introStartTime = 0;
+let fallbackTimer = null;
 const firedFlashes = new Set();
 
 function showFlash(text) {
@@ -246,39 +249,39 @@ function scheduleRandomNameGlitch() {
 function finishIntro() {
   if (finished) return;
   finished = true;
+  if (fallbackTimer) clearTimeout(fallbackTimer);
 
   if (intro) intro.classList.add('finished');
   if (skipIntroButton) skipIntroButton.hidden = true;
 
-  window.setTimeout(() => {
-    if (profile) {
-      profile.classList.add('visible');
-      profile.setAttribute('aria-hidden', 'false');
-    }
+  // Immediately make profile section visible
+  if (profile) {
+    profile.classList.add('visible');
+    profile.setAttribute('aria-hidden', 'false');
+  }
 
-    if (profileName) {
-      profileName.classList.remove('flicker-in');
-      void profileName.offsetWidth;
-      profileName.classList.add('flicker-in');
+  if (profileName) {
+    profileName.classList.remove('flicker-in');
+    void profileName.offsetWidth;
+    profileName.classList.add('flicker-in');
 
-      // Staggered cinematic follow-up flickers
-      [300, 650, 1100, 1900].forEach((d) => {
-        window.setTimeout(() => triggerNameBurst(), d);
-      });
+    // Follow-up micro-glitches
+    [250, 600, 1000].forEach((d) => {
+      window.setTimeout(() => triggerNameBurst(), d);
+    });
 
-      // Saint ignited reveal with cyber neon glow
-      window.setTimeout(() => {
-        saintName?.classList.add('saint-visible');
-      }, 1900);
+    // Saint neon reveal
+    window.setTimeout(() => {
+      saintName?.classList.add('saint-visible');
+    }, 1200);
 
-      // Socials and Discord card smooth spring reveal
-      window.setTimeout(() => {
-        socials?.classList.add('socials-visible');
-        if (discordCard) discordCard.classList.add('discord-visible');
-        scheduleRandomNameGlitch();
-      }, 2600);
-    }
-  }, 80);
+    // Socials & Discord connect card reveal
+    window.setTimeout(() => {
+      socials?.classList.add('socials-visible');
+      if (discordCard) discordCard.classList.add('discord-visible');
+      scheduleRandomNameGlitch();
+    }, 1800);
+  }
 }
 
 function skipIntro() {
@@ -287,15 +290,18 @@ function skipIntro() {
 }
 
 if (skipIntroButton) {
-  skipIntroButton.addEventListener('click', skipIntro);
+  skipIntroButton.addEventListener('click', (e) => {
+    e.stopPropagation();
+    skipIntro();
+  });
 }
 
 function animateIntro() {
   if (finished) return;
 
-  // Use robust hybrid timer so the intro NEVER stalls even if video buffers
+  // Hybrid timer: always advances in real-time regardless of network/buffering
   const elapsed = (performance.now() - introStartTime) / 1000;
-  const videoTime = (video && !video.paused) ? (video.currentTime || 0) : 0;
+  const videoTime = (video && !video.paused && !video.seeking) ? (video.currentTime || 0) : 0;
   const t = Math.max(videoTime, elapsed);
 
   if (introProgressBar) {
@@ -303,7 +309,7 @@ function animateIntro() {
     introProgressBar.style.width = `${pct}%`;
   }
 
-  if (t >= 1.15 && intro) {
+  if (t >= 1.0 && intro) {
     intro.classList.add('video-revealed');
   }
 
@@ -339,7 +345,6 @@ async function startExperience() {
     try {
       await video.play();
     } catch (_) {
-      // Autoplay fallback with mute if blocked by browser policy
       video.muted = true;
       try { await video.play(); } catch (err) {}
     }
@@ -348,6 +353,11 @@ async function startExperience() {
 
   volumeControlWrap?.classList.add('ready');
   animateIntro();
+
+  // Fail-safe timeout: unconditionally reveal details after 6.2s
+  fallbackTimer = setTimeout(() => {
+    if (!finished) finishIntro();
+  }, 6200);
 }
 
 video?.addEventListener('loadeddata', () => {
