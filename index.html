@@ -43,14 +43,15 @@
     <div class="grain"></div>
     <canvas id="particles" class="particles"></canvas>
 
+    <!-- Intro Stage -->
     <section id="intro" class="intro" aria-hidden="false">
       <div id="introBlack" class="intro-black"></div>
       <div id="flash" class="flash">TTV<span>/</span>RECOD</div>
       <div class="intro-caption">TTVRecod</div>
       <div class="intro-progress"><span id="introProgressBar"></span></div>
-      <button id="skipIntroButton" class="skip-intro-button" type="button" aria-label="Skip intro" hidden>SKIP INTRO</button>
     </section>
 
+    <!-- Profile Reveal -->
     <section id="profile" class="profile" aria-hidden="true">
       <div class="profile-wrap">
         <div class="eyebrow"><span class="dot"></span> TTVRECOD // ONLINE</div>
@@ -125,13 +126,21 @@
       </div>
     </section>
 
-    <!-- Sleek Top-Right Volume Control -->
-    <label class="volume-control" aria-label="Video volume">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Zm11.5 3a3.5 3.5 0 0 0-1.7-3v6a3.5 3.5 0 0 0 1.7-3Zm0-7v1.7a7 7 0 0 1 0 10.6v1.7a8.7 8.7 0 0 0 0-14Z"/></svg>
+    <!-- Sleek Top-Right Volume Control (Non-label container with direct slider hit target) -->
+    <div class="volume-control" id="volumeControlWrap" aria-label="Video volume">
+      <button type="button" id="volumeMuteBtn" class="volume-mute-btn" aria-label="Toggle sound">
+        <svg id="volumeIcon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 9v6h4l5 4V5L8 9H4Zm11.5 3a3.5 3.5 0 0 0-1.7-3v6a3.5 3.5 0 0 0 1.7-3Zm0-7v1.7a7 7 0 0 1 0 10.6v1.7a8.7 8.7 0 0 0 0-14Z"/>
+        </svg>
+      </button>
       <input id="volumeSlider" type="range" min="0" max="100" value="70" step="1" aria-label="Volume" />
       <span id="volumeValue">70%</span>
-    </label>
+    </div>
 
+    <!-- Independent Bottom-Right Skip Intro Button -->
+    <button id="skipIntroButton" class="skip-intro-button" type="button" aria-label="Skip intro" hidden>SKIP INTRO</button>
+
+    <!-- Start Button -->
     <button id="enterButton" class="enter-button" type="button" aria-label="Enter Hell">
       <span class="enter-main">Enter Hell</span>
       <span class="enter-note">Enter</span>

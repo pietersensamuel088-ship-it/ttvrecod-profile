@@ -68,7 +68,9 @@ const saintName = document.querySelector('.saint-name');
 const socials = document.querySelector('.socials');
 const discordCard = document.getElementById('discordCard');
 const discordUsernameText = document.getElementById('discordUsernameText');
-const volumeControl = document.querySelector('.volume-control');
+const volumeControlWrap = document.getElementById('volumeControlWrap');
+const volumeMuteBtn = document.getElementById('volumeMuteBtn');
+const volumeIcon = document.getElementById('volumeIcon');
 const volumeSlider = document.getElementById('volumeSlider');
 const volumeValue = document.getElementById('volumeValue');
 const canvas = document.getElementById('particles');
@@ -98,6 +100,8 @@ if (discordUsernameText && CONFIG.discordUsername) {
 }
 
 // --- Volume Controller ---
+let previousVolume = Math.round(CONFIG.defaultVolume * 100);
+
 function updateVolume() {
   const value = Math.max(0, Math.min(100, Number(volumeSlider?.value ?? 70)));
   if (volumeSlider) {
@@ -105,14 +109,44 @@ function updateVolume() {
     volumeSlider.style.setProperty('--fill', `${value}%`);
   }
   if (volumeValue) volumeValue.textContent = `${value}%`;
-  video.volume = value / 100;
-  video.muted = value === 0;
+
+  if (video) {
+    video.volume = value / 100;
+    video.muted = value === 0;
+  }
+
+  // Update speaker SVG
+  if (volumeIcon) {
+    if (value === 0) {
+      volumeIcon.innerHTML = '<path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>';
+    } else if (value < 50) {
+      volumeIcon.innerHTML = '<path d="M5 9v6h4l5 5V4L9 9H5zm11.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>';
+    } else {
+      volumeIcon.innerHTML = '<path d="M4 9v6h4l5 4V5L8 9H4Zm11.5 3a3.5 3.5 0 0 0-1.7-3v6a3.5 3.5 0 0 0 1.7-3Zm0-7v1.7a7 7 0 0 1 0 10.6v1.7a8.7 8.7 0 0 0 0-14Z"/>';
+    }
+  }
+}
+
+function toggleMute() {
+  const current = Number(volumeSlider?.value ?? 0);
+  if (current > 0) {
+    previousVolume = current;
+    if (volumeSlider) volumeSlider.value = '0';
+  } else {
+    if (volumeSlider) volumeSlider.value = String(previousVolume || 70);
+  }
+  updateVolume();
 }
 
 if (volumeSlider) {
   volumeSlider.value = String(Math.round(CONFIG.defaultVolume * 100));
   volumeSlider.addEventListener('input', updateVolume);
+  volumeSlider.addEventListener('change', updateVolume);
   updateVolume();
+}
+
+if (volumeMuteBtn) {
+  volumeMuteBtn.addEventListener('click', toggleMute);
 }
 
 // --- Cinematic Background Particles ---
@@ -161,24 +195,25 @@ function drawParticles() {
 drawParticles();
 
 // --- Intro Sequence & Glitches ---
-const INTRO_LENGTH = 9.5;
+const INTRO_LENGTH = 8.5; // Optimized cinematic intro duration
 const FLASHES = [
-  { at: 2.10, text: 'TTV/RECOD' },
-  { at: 2.56, text: 'RECOD' },
-  { at: 3.04, text: 'TTV/RECOD' },
-  { at: 3.62, text: 'RECOD' },
-  { at: 4.20, text: 'TTV/RECOD' },
-  { at: 4.94, text: 'TTV/RECOD' },
-  { at: 5.52, text: 'RECOD' },
-  { at: 6.16, text: 'TTV/RECOD' }
+  { at: 1.80, text: 'TTV/RECOD' },
+  { at: 2.30, text: 'RECOD' },
+  { at: 2.85, text: 'TTV/RECOD' },
+  { at: 3.50, text: 'RECOD' },
+  { at: 4.10, text: 'TTV/RECOD' },
+  { at: 4.80, text: 'TTV/RECOD' },
+  { at: 5.40, text: 'RECOD' },
+  { at: 6.00, text: 'TTV/RECOD' }
 ];
 
 let started = false;
 let finished = false;
-let loaded = false;
+let introStartTime = 0;
 const firedFlashes = new Set();
 
 function showFlash(text) {
+  if (!flash) return;
   flash.textContent = text;
   flash.classList.remove('show');
   void flash.offsetWidth;
@@ -211,12 +246,15 @@ function scheduleRandomNameGlitch() {
 function finishIntro() {
   if (finished) return;
   finished = true;
-  intro.classList.add('finished');
+
+  if (intro) intro.classList.add('finished');
   if (skipIntroButton) skipIntroButton.hidden = true;
 
   window.setTimeout(() => {
-    profile.classList.add('visible');
-    profile.setAttribute('aria-hidden', 'false');
+    if (profile) {
+      profile.classList.add('visible');
+      profile.setAttribute('aria-hidden', 'false');
+    }
 
     if (profileName) {
       profileName.classList.remove('flicker-in');
@@ -224,32 +262,27 @@ function finishIntro() {
       profileName.classList.add('flicker-in');
 
       // Staggered cinematic follow-up flickers
-      [350, 750, 1200, 2100].forEach((d) => {
+      [300, 650, 1100, 1900].forEach((d) => {
         window.setTimeout(() => triggerNameBurst(), d);
       });
 
       // Saint ignited reveal with cyber neon glow
       window.setTimeout(() => {
         saintName?.classList.add('saint-visible');
-      }, 2100);
+      }, 1900);
 
       // Socials and Discord card smooth spring reveal
       window.setTimeout(() => {
         socials?.classList.add('socials-visible');
         if (discordCard) discordCard.classList.add('discord-visible');
         scheduleRandomNameGlitch();
-      }, 2800);
+      }, 2600);
     }
-  }, 100);
+  }, 80);
 }
 
 function skipIntro() {
   if (!started || finished) return;
-  try {
-    video.currentTime = INTRO_LENGTH;
-  } catch (_) {}
-  if (introProgressBar) introProgressBar.style.width = '100%';
-  if (skipIntroButton) skipIntroButton.hidden = true;
   finishIntro();
 }
 
@@ -259,12 +292,20 @@ if (skipIntroButton) {
 
 function animateIntro() {
   if (finished) return;
-  const t = video.currentTime || 0;
+
+  // Use robust hybrid timer so the intro NEVER stalls even if video buffers
+  const elapsed = (performance.now() - introStartTime) / 1000;
+  const videoTime = (video && !video.paused) ? (video.currentTime || 0) : 0;
+  const t = Math.max(videoTime, elapsed);
+
   if (introProgressBar) {
-    introProgressBar.style.width = `${Math.min(100, (t / INTRO_LENGTH) * 100)}%`;
+    const pct = Math.min(100, (t / INTRO_LENGTH) * 100);
+    introProgressBar.style.width = `${pct}%`;
   }
 
-  if (t >= 1.15) intro.classList.add('video-revealed');
+  if (t >= 1.15 && intro) {
+    intro.classList.add('video-revealed');
+  }
 
   for (let i = 0; i < FLASHES.length; i++) {
     if (!firedFlashes.has(i) && t >= FLASHES[i].at) {
@@ -274,48 +315,51 @@ function animateIntro() {
   }
 
   if (t >= INTRO_LENGTH) {
-    if (skipIntroButton) skipIntroButton.hidden = true;
     finishIntro();
     return;
   }
+
   requestAnimationFrame(animateIntro);
 }
 
 async function startExperience() {
   if (started) return;
   started = true;
-  enterButton.classList.add('hidden');
-  loading.classList.add('hidden');
+  introStartTime = performance.now();
+
+  enterButton?.classList.add('hidden');
+  loading?.classList.add('hidden');
   if (skipIntroButton) skipIntroButton.hidden = false;
 
-  video.currentTime = 0;
-  video.muted = (Number(volumeSlider?.value ?? 70) === 0);
-  updateVolume();
+  if (video) {
+    video.currentTime = 0;
+    video.muted = (Number(volumeSlider?.value ?? 70) === 0);
+    updateVolume();
 
-  try {
-    await video.play();
-  } catch (error) {
-    // Autoplay fallback with mute if blocked by browser policy
-    video.muted = true;
-    try { await video.play(); } catch (_) {}
+    try {
+      await video.play();
+    } catch (_) {
+      // Autoplay fallback with mute if blocked by browser policy
+      video.muted = true;
+      try { await video.play(); } catch (err) {}
+    }
+    video.classList.add('visible');
   }
 
-  video.classList.add('visible');
-  volumeControl?.classList.add('ready');
+  volumeControlWrap?.classList.add('ready');
   animateIntro();
 }
 
-video.addEventListener('loadeddata', () => {
-  loaded = true;
-  loading.classList.add('hidden');
-  enterButton.disabled = false;
+video?.addEventListener('loadeddata', () => {
+  loading?.classList.add('hidden');
+  if (enterButton) enterButton.disabled = false;
 });
 
-video.addEventListener('error', () => {
-  loading.textContent = 'video failed to load';
+video?.addEventListener('error', () => {
+  if (loading) loading.textContent = 'video failed to load';
 });
 
-enterButton.addEventListener('click', startExperience);
+enterButton?.addEventListener('click', startExperience);
 
 window.addEventListener('keydown', (event) => {
   if (!started && (event.key === 'Enter' || event.key === ' ')) {
