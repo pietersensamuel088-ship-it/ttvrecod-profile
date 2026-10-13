@@ -198,15 +198,17 @@ function drawParticles() {
 drawParticles();
 
 // --- Intro Sequence & Glitches ---
-const INTRO_LENGTH = 6.0; // Snappy 6-second cinematic sequence
+const INTRO_LENGTH = 10.0; // 10-second cinematic sequence
 const FLASHES = [
-  { at: 1.80, text: 'TTV/RECOD' },
-  { at: 2.30, text: 'RECOD' },
-  { at: 2.85, text: 'TTV/RECOD' },
-  { at: 3.50, text: 'RECOD' },
-  { at: 4.10, text: 'TTV/RECOD' },
-  { at: 4.80, text: 'TTV/RECOD' },
-  { at: 5.40, text: 'RECOD' }
+  { at: 2.10, text: 'TTV/RECOD' },
+  { at: 2.80, text: 'RECOD' },
+  { at: 3.60, text: 'TTV/RECOD' },
+  { at: 4.50, text: 'RECOD' },
+  { at: 5.50, text: 'TTV/RECOD' },
+  { at: 6.60, text: 'TTV/RECOD' },
+  { at: 7.80, text: 'RECOD' },
+  { at: 8.90, text: 'TTV/RECOD' },
+  { at: 9.40, text: 'RECOD' }
 ];
 
 let started = false;
@@ -354,10 +356,10 @@ async function startExperience() {
   volumeControlWrap?.classList.add('ready');
   animateIntro();
 
-  // Fail-safe timeout: unconditionally reveal details after 6.2s
+  // Fail-safe timeout: unconditionally reveal details after 10.2s
   fallbackTimer = setTimeout(() => {
     if (!finished) finishIntro();
-  }, 6200);
+  }, 10200);
 }
 
 video?.addEventListener('loadeddata', () => {
