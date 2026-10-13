@@ -2,7 +2,6 @@ const CONFIG = {
   // Profile links configuration
   socials: {
     discord: 'https://discord.com/users/1162838607220965377',
-    twitter: 'https://x.com/TTVRecod',
     instagram: 'https://instagram.com/chrisbrownoffical',
     github: 'https://github.com/TTVRecod',
     reddit: 'https://reddit.com/u/TTVRecod',
@@ -11,7 +10,7 @@ const CONFIG = {
     steam: 'https://steamcommunity.com/id/TTVRecod'
   },
   discordProfile: 'https://discord.com/users/1162838607220965377',
-  clipsAdmin: 'https://clips.sa1nt.xyz/admin',
+  discordUsername: 'ttvrecod',
   defaultVolume: 0.70,
   customCursor: {
     enabled: true,
@@ -59,7 +58,6 @@ setupCustomCursor();
 const video = document.getElementById('bgVideo');
 const intro = document.getElementById('intro');
 const flash = document.getElementById('flash');
-const introGlitch = document.getElementById('introGlitch');
 const introProgressBar = document.getElementById('introProgressBar');
 const skipIntroButton = document.getElementById('skipIntroButton');
 const profile = document.getElementById('profile');
@@ -69,7 +67,7 @@ const profileName = document.getElementById('profileName');
 const saintName = document.querySelector('.saint-name');
 const socials = document.querySelector('.socials');
 const discordCard = document.getElementById('discordCard');
-const clipsAdminButton = document.getElementById('clipsAdminButton');
+const discordUsernameText = document.getElementById('discordUsernameText');
 const volumeControl = document.querySelector('.volume-control');
 const volumeSlider = document.getElementById('volumeSlider');
 const volumeValue = document.getElementById('volumeValue');
@@ -79,7 +77,6 @@ const ctx = canvas.getContext('2d');
 // --- Populate Dynamic Links ---
 const socialMap = {
   socialDiscord: CONFIG.socials.discord,
-  socialTwitter: CONFIG.socials.twitter,
   socialInstagram: CONFIG.socials.instagram,
   socialGithub: CONFIG.socials.github,
   socialReddit: CONFIG.socials.reddit,
@@ -93,8 +90,12 @@ for (const [id, url] of Object.entries(socialMap)) {
   if (el && url) el.href = url;
 }
 
-if (discordCard) discordCard.href = CONFIG.discordProfile;
-if (clipsAdminButton) clipsAdminButton.href = CONFIG.clipsAdmin;
+if (discordCard && CONFIG.discordProfile) {
+  discordCard.href = CONFIG.discordProfile;
+}
+if (discordUsernameText && CONFIG.discordUsername) {
+  discordUsernameText.textContent = CONFIG.discordUsername;
+}
 
 // --- Volume Controller ---
 function updateVolume() {
@@ -184,12 +185,6 @@ function showFlash(text) {
   flash.classList.add('show');
 }
 
-function showGlitch() {
-  introGlitch.classList.remove('show');
-  void introGlitch.offsetWidth;
-  introGlitch.classList.add('show');
-}
-
 function triggerNameBurst() {
   if (!profileName) return;
   profileName.classList.remove('name-flicker-burst');
@@ -242,7 +237,6 @@ function finishIntro() {
       window.setTimeout(() => {
         socials?.classList.add('socials-visible');
         if (discordCard) discordCard.classList.add('discord-visible');
-        if (clipsAdminButton) clipsAdminButton.classList.add('visible');
         scheduleRandomNameGlitch();
       }, 2800);
     }
@@ -271,7 +265,6 @@ function animateIntro() {
   }
 
   if (t >= 1.15) intro.classList.add('video-revealed');
-  if (t >= 2.0 && t < 2.2) showGlitch();
 
   for (let i = 0; i < FLASHES.length; i++) {
     if (!firedFlashes.has(i) && t >= FLASHES[i].at) {

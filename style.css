@@ -1,7 +1,7 @@
 :root {
   --bg: #000;
   --fg: #fff;
-  --muted: rgba(255, 255, 255, 0.58);
+  --muted: rgba(255, 255, 255, 0.6);
   --accent: #ff2147;
   --accent-glow: rgba(255, 33, 71, 0.45);
   --saint-pink: #ff2a6d;
@@ -65,7 +65,7 @@ a, button {
   position: absolute;
   inset: 0;
   z-index: 1;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.42), rgba(0, 0, 0, 0.08) 35%, rgba(0, 0, 0, 0.55));
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.42), rgba(0, 0, 0, 0.08) 35%, rgba(0, 0, 0, 0.58));
   pointer-events: none;
 }
 
@@ -73,7 +73,7 @@ a, button {
   position: absolute;
   inset: 0;
   z-index: 2;
-  background: radial-gradient(circle at 50% 50%, transparent 25%, rgba(0, 0, 0, 0.72) 100%);
+  background: radial-gradient(circle at 50% 50%, transparent 25%, rgba(0, 0, 0, 0.75) 100%);
   pointer-events: none;
 }
 
@@ -82,7 +82,7 @@ a, button {
   inset: 0;
   z-index: 3;
   pointer-events: none;
-  opacity: 0.06;
+  opacity: 0.05;
   background: repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.6) 0, rgba(255, 255, 255, 0.6) 1px, transparent 1px, transparent 4px);
 }
 
@@ -205,30 +205,6 @@ a, button {
   18% { opacity: 1; transform: scale(1); filter: blur(0); }
   42% { opacity: 0.95; }
   100% { opacity: 0; transform: scale(0.98); filter: blur(2px); }
-}
-
-.glitch-title {
-  position: absolute;
-  top: 14%;
-  left: 50%;
-  transform: translateX(-50%);
-  font-weight: 800;
-  letter-spacing: 0.28em;
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.46);
-  opacity: 0;
-}
-
-.glitch-title.show {
-  animation: glitchTitle 0.45s steps(2) both;
-}
-
-@keyframes glitchTitle {
-  0% { opacity: 0; transform: translateX(-50%) skew(0); }
-  18% { opacity: 1; transform: translateX(calc(-50% + 4px)) skew(-9deg); }
-  35% { transform: translateX(calc(-50% - 5px)) skew(8deg); }
-  58% { transform: translateX(-50%) skew(0); }
-  100% { opacity: 0.65; }
 }
 
 /* Skip Intro button */
@@ -397,7 +373,7 @@ a, button {
 
 .profile-wrap {
   text-align: center;
-  padding: 30px 24px 28px;
+  padding: 24px 20px 24px;
   width: min(860px, 94vw);
 }
 
@@ -456,7 +432,7 @@ a, button {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 2px;
   margin-top: 6px;
 }
 
@@ -690,18 +666,18 @@ a, button {
   transition: opacity 0.2s ease;
 }
 
-/* --- Social Icons Row --- */
+/* --- Social Icons Row (7 Icons, Clean & Pro) --- */
 .socials {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 14px;
+  gap: 16px;
   flex-wrap: wrap;
   opacity: 0;
-  transform: translateY(50px);
+  transform: translateY(44px);
   pointer-events: none;
-  margin-top: 42px;
-  max-width: 720px;
+  margin-top: 36px;
+  max-width: 680px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -712,25 +688,26 @@ a, button {
 }
 
 @keyframes socialsContainerRise {
-  from { opacity: 0; transform: translateY(50px); }
+  from { opacity: 0; transform: translateY(44px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
 .social {
   position: relative;
-  width: 60px;
-  height: 60px;
-  display: grid;
-  place-items: center;
-  border-radius: 18px;
+  width: 58px;
+  height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 17px;
   color: #fff;
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(15, 15, 15, 0.6));
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(14, 14, 14, 0.65));
   border: 1px solid rgba(255, 255, 255, 0.13);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.12);
   opacity: 0;
-  transform: translateY(40px) scale(0.9);
+  transform: translateY(38px) scale(0.9);
   transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
               box-shadow 0.25s ease,
               border-color 0.25s ease,
@@ -741,17 +718,16 @@ a, button {
   animation: socialItemSpring 0.7s cubic-bezier(0.34, 1.4, 0.64, 1) both;
 }
 
-.socials.socials-visible .social:nth-child(1) { animation-delay: 0.03s; }
-.socials.socials-visible .social:nth-child(2) { animation-delay: 0.08s; }
-.socials.socials-visible .social:nth-child(3) { animation-delay: 0.13s; }
-.socials.socials-visible .social:nth-child(4) { animation-delay: 0.18s; }
-.socials.socials-visible .social:nth-child(5) { animation-delay: 0.23s; }
-.socials.socials-visible .social:nth-child(6) { animation-delay: 0.28s; }
-.socials.socials-visible .social:nth-child(7) { animation-delay: 0.33s; }
-.socials.socials-visible .social:nth-child(8) { animation-delay: 0.38s; }
+.socials.socials-visible .social:nth-child(1) { animation-delay: 0.04s; }
+.socials.socials-visible .social:nth-child(2) { animation-delay: 0.09s; }
+.socials.socials-visible .social:nth-child(3) { animation-delay: 0.14s; }
+.socials.socials-visible .social:nth-child(4) { animation-delay: 0.19s; }
+.socials.socials-visible .social:nth-child(5) { animation-delay: 0.24s; }
+.socials.socials-visible .social:nth-child(6) { animation-delay: 0.29s; }
+.socials.socials-visible .social:nth-child(7) { animation-delay: 0.34s; }
 
 @keyframes socialItemSpring {
-  0% { opacity: 0; transform: translateY(42px) scale(0.88); }
+  0% { opacity: 0; transform: translateY(40px) scale(0.88); }
   70% { opacity: 1; transform: translateY(-5px) scale(1.04); }
   100% { opacity: 1; transform: translateY(0) scale(1); }
 }
@@ -760,7 +736,7 @@ a, button {
   width: 25px;
   height: 25px;
   fill: currentColor;
-  opacity: 0.88;
+  opacity: 0.9;
   transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease, filter 0.2s ease;
 }
 
@@ -789,7 +765,7 @@ a, button {
   transform: translateX(-50%) translateY(4px);
   padding: 5px 9px;
   border-radius: 8px;
-  background: rgba(12, 12, 12, 0.85);
+  background: rgba(12, 12, 12, 0.88);
   border: 1px solid rgba(255, 255, 255, 0.12);
   color: #fff;
   font-size: 10px;
@@ -810,26 +786,27 @@ a, button {
   transform: translateX(-50%) translateY(0);
 }
 
-/* --- Discord Card --- */
+/* --- Discord Connect Card (Professional & Sleek) --- */
 .discord-card {
   position: relative;
-  margin: 34px auto 0;
+  margin: 32px auto 0;
   display: flex;
   align-items: center;
-  gap: 14px;
-  width: min(440px, 92vw);
-  padding: 11px 16px 11px 12px;
+  justify-content: space-between;
+  gap: 16px;
+  width: min(420px, 92vw);
+  padding: 12px 18px 12px 14px;
   text-align: left;
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 20px;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(12, 12, 12, 0.65) 100%);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(12, 12, 12, 0.68) 100%);
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   color: #fff;
   text-decoration: none;
   opacity: 0;
-  transform: translateY(32px) scale(0.96);
+  transform: translateY(30px) scale(0.96);
   transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
               background 0.25s ease,
               border-color 0.25s ease,
@@ -841,22 +818,22 @@ a, button {
 }
 
 @keyframes cardRiseSpring {
-  0% { opacity: 0; transform: translateY(36px) scale(0.95); }
+  0% { opacity: 0; transform: translateY(34px) scale(0.95); }
   75% { opacity: 1; transform: translateY(-4px) scale(1.02); }
   100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .discord-card:hover {
-  transform: translateY(-5px) scale(1.015);
-  background: linear-gradient(135deg, rgba(255, 42, 109, 0.14) 0%, rgba(20, 20, 20, 0.78) 100%);
+  transform: translateY(-5px) scale(1.02);
+  background: linear-gradient(135deg, rgba(255, 42, 109, 0.14) 0%, rgba(20, 20, 20, 0.8) 100%);
   border-color: rgba(255, 79, 134, 0.45);
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55), 0 0 30px rgba(255, 33, 71, 0.25);
 }
 
 .discord-avatar-wrap {
   position: relative;
-  width: 56px;
-  height: 56px;
+  width: 52px;
+  height: 52px;
   flex: none;
 }
 
@@ -865,13 +842,13 @@ a, button {
   height: 100%;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid rgba(255, 255, 255, 0.15);
+  border: 2px solid rgba(255, 255, 255, 0.18);
   box-shadow: 0 0 0 4px rgba(88, 101, 242, 0.12);
   transition: border-color 0.25s ease, transform 0.25s ease;
 }
 
 .discord-card:hover .discord-avatar-wrap img {
-  border-color: rgba(255, 79, 134, 0.6);
+  border-color: rgba(255, 79, 134, 0.65);
   transform: scale(1.04);
 }
 
@@ -880,8 +857,8 @@ a, button {
   position: absolute;
   right: -2px;
   bottom: -2px;
-  width: 16px;
-  height: 16px;
+  width: 15px;
+  height: 15px;
   border-radius: 50%;
   background: var(--green-online);
   border: 3px solid #101010;
@@ -909,104 +886,72 @@ a, button {
   display: flex;
   flex: 1;
   flex-direction: column;
-  gap: 3px;
+  gap: 2px;
+}
+
+.discord-tag {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: rgba(255, 255, 255, 0.45);
+  text-transform: uppercase;
 }
 
 .discord-copy strong {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 700;
-  line-height: 1.15;
+  line-height: 1.2;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   letter-spacing: 0.02em;
 }
 
-.discord-copy span {
-  font-size: 12px;
-  color: var(--muted);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.discord-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 13px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: #fff;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.discord-card:hover .discord-btn {
+  background: rgba(255, 42, 109, 0.35);
+  border-color: rgba(255, 79, 134, 0.6);
+  transform: translateX(2px);
 }
 
 .discord-arrow {
-  font-size: 20px;
-  color: rgba(255, 255, 255, 0.4);
-  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.2s ease;
+  font-size: 13px;
+  line-height: 0;
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .discord-card:hover .discord-arrow {
-  transform: translate(3px, -3px);
-  color: #fff;
-}
-
-/* --- Clips Admin Suite Button --- */
-.clips-admin-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  width: fit-content;
-  margin: 22px auto 0;
-  padding: 10px 18px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 999px;
-  background: rgba(10, 10, 10, 0.55);
-  color: #fff;
-  text-decoration: none;
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  opacity: 0;
-  transform: translateY(12px);
-  pointer-events: none;
-  transition: opacity 0.45s ease,
-              transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
-              background 0.2s ease,
-              border-color 0.2s ease,
-              box-shadow 0.2s ease;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-}
-
-.clips-admin-button.visible {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
-}
-
-.clips-admin-button:hover {
-  background: rgba(130, 10, 25, 0.65);
-  border-color: rgba(255, 70, 90, 0.65);
-  transform: translateY(-2px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 22px rgba(255, 33, 71, 0.3);
-}
-
-.clips-admin-arrow {
-  font-size: 14px;
-  line-height: 0;
-  transition: transform 0.2s ease;
-}
-
-.clips-admin-button:hover .clips-admin-arrow {
   transform: translate(2px, -2px);
 }
 
-/* Volume Control Pill */
+/* --- Refined Volume Control (Top Right) --- */
 .volume-control {
   position: fixed;
-  top: 20px;
-  left: 20px;
+  top: 24px;
+  right: 24px;
+  left: auto;
   z-index: 30;
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 10px 14px;
+  padding: 9px 15px;
   border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 18px;
-  background: linear-gradient(180deg, rgba(20, 20, 20, 0.6), rgba(8, 8, 8, 0.4));
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(22, 22, 22, 0.65), rgba(10, 10, 10, 0.45));
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   box-shadow: 0 14px 34px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);
@@ -1030,8 +975,8 @@ a, button {
 }
 
 .volume-control svg {
-  width: 17px;
-  height: 17px;
+  width: 16px;
+  height: 16px;
   fill: currentColor;
   flex: none;
   filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.25));
@@ -1039,8 +984,8 @@ a, button {
 
 .volume-control input[type=range] {
   --fill: 70%;
-  width: 140px;
-  height: 6px;
+  width: 120px;
+  height: 5px;
   appearance: none;
   -webkit-appearance: none;
   background: linear-gradient(90deg, #ff4f86 0%, #ff4f86 var(--fill), rgba(255, 255, 255, 0.15) var(--fill), rgba(255, 255, 255, 0.15) 100%);
@@ -1051,7 +996,7 @@ a, button {
 }
 
 .volume-control input[type=range]::-webkit-slider-runnable-track {
-  height: 6px;
+  height: 5px;
   background: transparent;
   border-radius: 999px;
 }
@@ -1059,8 +1004,8 @@ a, button {
 .volume-control input[type=range]::-webkit-slider-thumb {
   appearance: none;
   -webkit-appearance: none;
-  width: 15px;
-  height: 15px;
+  width: 14px;
+  height: 14px;
   margin-top: -4.5px;
   border-radius: 50%;
   border: 2px solid rgba(255, 255, 255, 0.96);
@@ -1076,20 +1021,20 @@ a, button {
 }
 
 .volume-control input[type=range]::-moz-range-track {
-  height: 6px;
+  height: 5px;
   background: rgba(255, 255, 255, 0.15);
   border-radius: 999px;
 }
 
 .volume-control input[type=range]::-moz-range-progress {
-  height: 6px;
+  height: 5px;
   background: #ff4f86;
   border-radius: 999px;
 }
 
 .volume-control input[type=range]::-moz-range-thumb {
-  width: 15px;
-  height: 15px;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
   border: 2px solid rgba(255, 255, 255, 0.96);
   background: #ff4f86;
@@ -1097,7 +1042,7 @@ a, button {
 }
 
 .volume-control span {
-  min-width: 40px;
+  min-width: 36px;
   text-align: right;
   font-size: 11px;
   font-weight: 700;
@@ -1152,46 +1097,42 @@ html.custom-cursor-enabled label {
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .profile-wrap {
-    padding: 24px 16px;
+    padding: 20px 14px;
   }
   .name-stack h1, .saint-name {
     font-size: clamp(3.8rem, 15vw, 7.5rem);
   }
   .socials {
-    gap: 10px;
-    margin-top: 32px;
+    gap: 12px;
+    margin-top: 28px;
   }
   .social {
-    width: 54px;
-    height: 54px;
-    border-radius: 16px;
+    width: 52px;
+    height: 52px;
+    border-radius: 15px;
   }
   .social svg {
     width: 22px;
     height: 22px;
   }
   .discord-card {
-    margin-top: 26px;
+    margin-top: 24px;
     width: 100%;
     max-width: 380px;
-  }
-  .clips-admin-button {
-    width: 100%;
-    max-width: 260px;
+    padding: 10px 14px;
   }
   .volume-control {
     top: 14px;
-    left: 14px;
-    padding: 8px 10px;
-    border-radius: 15px;
+    right: 14px;
+    padding: 7px 11px;
+    border-radius: 999px;
   }
   .volume-control input[type=range] {
-    width: 90px;
+    width: 80px;
   }
-  #skipIntroButton {
+  .skip-intro-button {
     top: 14px;
-    left: auto;
-    right: 14px;
+    left: 14px;
     padding: 8px 14px;
     font-size: 10px;
   }
