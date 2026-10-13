@@ -3,13 +3,32 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#000000" />
-  <title>TTVRecod | Hell</title>
+  <meta name="theme-color" content="#ff2147" />
+  <title>TTVRecod | Saint</title>
+
+  <!-- Primary Meta Tags -->
+  <meta name="title" content="TTVRecod | Saint" />
+  <meta name="description" content="TTVRecod // Saint. Enter Hell." />
+
+  <!-- Open Graph / Discord / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://saint.xyz/" />
+  <meta property="og:title" content="TTVRecod | Saint" />
+  <meta property="og:description" content="TTVRecod // Saint. Enter Hell." />
+  <meta property="og:image" content="assets/discord-avatar.png" />
+
+  <!-- Twitter / X -->
+  <meta property="twitter:card" content="summary" />
+  <meta property="twitter:url" content="https://saint.xyz/" />
+  <meta property="twitter:title" content="TTVRecod | Saint" />
+  <meta property="twitter:description" content="TTVRecod // Saint. Enter Hell." />
+  <meta property="twitter:image" content="assets/discord-avatar.png" />
+
   <link rel="icon" type="image/png" sizes="512x512" href="assets/favicon.png" />
   <link rel="shortcut icon" href="assets/favicon.ico" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -30,6 +49,7 @@
       <div id="flash" class="flash">TTV<span>/</span>RECOD</div>
       <div class="intro-caption">TTVRecod</div>
       <div class="intro-progress"><span id="introProgressBar"></span></div>
+      <button id="skipIntroButton" class="skip-intro-button" type="button" aria-label="Skip intro" hidden>SKIP INTRO</button>
     </section>
 
     <section id="profile" class="profile" aria-hidden="true">
@@ -41,12 +61,15 @@
         </div>
         <div class="name-stack">
           <h1 id="profileName" data-text="TTVRecod">TTVRecod</h1>
-          <h2 class="saint-name">Saint</h2>
+          <h2 class="saint-name" data-text="Saint">Saint</h2>
         </div>
 
         <nav class="socials" aria-label="Social links">
           <a class="social" id="socialDiscord" href="#" target="_blank" rel="noopener noreferrer" aria-label="Discord" data-label="Discord">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.54 5.08A16.9 16.9 0 0 0 15.6 3.86l-.5 1.02a15.5 15.5 0 0 0-6.2 0l-.5-1.02A16.7 16.7 0 0 0 4.46 5.08C1.96 8.84 1.28 12.5 1.62 16.1a16.1 16.1 0 0 0 4.82 2.44l1.17-1.58c-.64-.24-1.25-.53-1.82-.87l.45-.35a11.6 11.6 0 0 0 11.52 0l.46.35c-.58.34-1.19.63-1.83.87l1.17 1.58a16.1 16.1 0 0 0 4.82-2.44c.4-4.17-.68-7.8-2.84-11.02ZM8.7 14.1c-1.1 0-2.02-.99-2.02-2.2s.9-2.2 2.02-2.2 2.03.99 2.03 2.2-.91 2.2-2.03 2.2Zm6.6 0c-1.1 0-2.02-.99-2.02-2.2s.9-2.2 2.02-2.2 2.03.99 2.03 2.2-.91 2.2-2.03 2.2Z"/></svg>
+          </a>
+          <a class="social" id="socialTwitter" href="#" target="_blank" rel="noopener noreferrer" aria-label="Twitter / X" data-label="Twitter">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
           </a>
           <a class="social" id="socialInstagram" href="#" target="_blank" rel="noopener noreferrer" aria-label="Instagram" data-label="Instagram">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.3 2h9.4A5.3 5.3 0 0 1 22 7.3v9.4a5.3 5.3 0 0 1-5.3 5.3H7.3A5.3 5.3 0 0 1 2 16.7V7.3A5.3 5.3 0 0 1 7.3 2Zm0 1.9a3.4 3.4 0 0 0-3.4 3.4v9.4a3.4 3.4 0 0 0 3.4 3.4h9.4a3.4 3.4 0 0 0 3.4-3.4V7.3a3.4 3.4 0 0 0-3.4-3.4H7.3Zm9.95 1.4a1.3 1.3 0 1 1 0 2.6 1.3 1.3 0 0 1 0-2.6ZM12 6.7A5.3 5.3 0 1 1 6.7 12 5.3 5.3 0 0 1 12 6.7Zm0 1.9A3.4 3.4 0 1 0 15.4 12 3.4 3.4 0 0 0 12 8.6Z"/></svg>
@@ -69,15 +92,23 @@
         </nav>
 
         <a class="discord-card" id="discordCard" href="#" target="_blank" rel="noopener noreferrer" aria-label="Open Discord profile">
-          <span class="discord-status"></span>
-          <img src="assets/discord-avatar.png" alt="Discord avatar" />
-          <span class="discord-copy">
+          <div class="discord-avatar-wrap">
+            <img src="assets/discord-avatar.png" alt="Discord avatar" />
+            <span class="discord-status">
+              <span class="discord-status-ping"></span>
+            </span>
+          </div>
+          <div class="discord-copy">
             <strong>ttvrecord_00022</strong>
             <span>Currently Fucking Yo Bitch</span>
-          </span>
+          </div>
           <span class="discord-arrow">↗</span>
         </a>
 
+        <a id="clipsAdminButton" class="clips-admin-button" href="https://clips.sa1nt.xyz/admin" target="_blank" rel="noopener noreferrer">
+          <span>CLIPS ADMIN</span>
+          <span class="clips-admin-arrow">↗</span>
+        </a>
       </div>
     </section>
 
